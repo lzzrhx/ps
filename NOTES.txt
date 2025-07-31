@@ -1,0 +1,81 @@
+////////////////////////////////////////////////////////////////////////////////
+// This document contains course notes for the course:
+// "PS1 Programming with MIPS Assembly & C" by Gustavo Pezzi
+// https://pikuma.com/courses/ps1-programming-mips-assembly-language
+////////////////////////////////////////////////////////////////////////////////
+
+ SECTIONS:
+   #1: COURSE OVERVIEW
+   #2: NOTES
+
+
+
+  #1 | COURSE OVERVIEW:
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+
+   [X]  #1: Introduction
+   [-]  #2: History & Early Years
+   [-]  #3: Playstation Hardware
+   [-]  #4: MIPS Assembly
+   [-]  #5: Emulation & Debugger
+   [-]  #6: The MIPS Pipeline
+   [-]  #7: Warm Up Exercises
+   [-]  #8: Subroutines & Negative Numbers
+   [-]  #9: CISC vs RISC
+   [-] #10: Graphics System
+   [-] #11: Rendering Polygons
+   [-] #12: Memory Alignment
+   [-] #13: Copying Data to VRAM
+   [-] #14: Moving from Assembly to C
+   [-] #15: Psy-Q Data Types
+   [-] #16: Introduction to 3D Graphics
+   [-] #17: The GTE Coprocessor
+   [-] #18: Fixed-Point Math
+   [-] #19: GTE Inline Instructions
+   [-] #20: Controller Input
+   [-] #21: Linking Multiple Files
+   [-] #22: Camera Transformation
+   [-] #23: CD-ROM Access
+   [-] #24: Textured Polygons
+   [-] #25: Decoding Primitive Files
+   [-] #26: Decoding Texture Files
+   [-] #28: Multiple 3D Models
+   [-] #29: Loading Landscape Objects
+   [-] #30: Loading Track Faces
+   [-] #31: Loading Track Texture
+   [-] #32: Polygon Subdivision
+   [-] #33: Movement & Physics
+   [-] #34: Refactoring Track Visibility
+   [-] #35: Attracting & Track
+   [-] #36: Audio
+   [-] #37: Conclusion
+
+   [X] COMPLETED / [-] NOT COMPLETED
+
+
+
+  #2 | NOTES
+ - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+   - Course pipeline:
+     + History of the development of the Playstation
+     + Hardware and technical specs
+     + Star with: MIPS assembly
+     + Then move on to: C compiler & the Psy-Q library
+     + Topics:
+       + Graphics
+         + Ordering tables
+         + GPU instructions
+         + GTE
+       + Audio
+       + Joypad input
+       + Gaming programming patterns
+         + Fixed-point math
+     + At the end of the course we'll put everything we've learned together and create a game
+
+   - Toolchain:
+     + The original Psy-Q 32-bit library requires Windows 95 or XP
+     + But a modern 64-bit Psy-Q wrapper is also available for Windows 11
+
+   - ...
+   - ...
+
