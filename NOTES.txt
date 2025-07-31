@@ -75,6 +75,22 @@
    - Toolchain:
      + The original Psy-Q 32-bit library requires Windows 95 or XP
      + But a modern 64-bit Psy-Q wrapper is also available for Windows 11
+   
+   - Timeline:
+     + 1978: (8-bit  / 2nd gen) Atari 2600 released, started the revolution of home consoles with cartridges
+     + 1985: (8-bit  / 3rd gen) Famicom / NES released
+     + 1989: (16-bit / 4th gen) Sega Megadrive / Genesis
+     + 1991: (16-bit / 4th gen) Super Famicom / SNES
+     + 1992: 3D arcade games (Virtua Fighter, Virtua Racing, etc.)
+     + 1993: (32-bit / 5th gen) Panasonic 3DO
+     + 1993: (32-bit / 5th gen) Atari Jaguar
+     + 1994: (32-bit / 5th gen) Sega Saturn
+     + 1994: (32-bit / 5th gen) Sony Playstation
+
+   - 5th generation consoles:
+     + 32-bit
+     + CD-ROM
+     + 3D polygon graphics
 
    - ...
    - ...
