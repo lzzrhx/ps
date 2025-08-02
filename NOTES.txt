@@ -14,8 +14,8 @@
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
    [X]  #1: Introduction
-   [-]  #2: History & Early Years
-   [-]  #3: Playstation Hardware
+   [X]  #2: History & Early Years
+   [X]  #3: Playstation Hardware
    [-]  #4: MIPS Assembly
    [-]  #5: Emulation & Debugger
    [-]  #6: The MIPS Pipeline
@@ -91,6 +91,88 @@
      + 32-bit
      + CD-ROM
      + 3D polygon graphics
+
+   - Ken Kutaragi is known as "the father of the Playstation"
+
+   - Technical specs:
+     + CPU: 32-bit R3000A MIPS(LSI) at 33.86 MHz
+     + RAM: 2MB EDO Memory
+     + VRAM: 1MB
+     + GPU: SCPH-9000 chip responsible for rasterization
+     + Coprocessors:
+       + CP0: System Control
+       + CP2: GTE (Geometry Transformation Engine)
+       + MDEC (Motion Decoder)
+     + SPU: Sound Processing Unit (16-bit 24-channel ADPCPM)
+     + CD Subsystem: DSP controlling the motor & laser
+
+   - The PS1 MIPS (Microprocessor without Interlocked Pipelined Stages) CPU:
+     + Sony commissioned LSI Logic to build their CPU. The LSI CW33300 block was binary-compatible with the MIPS R3000A and used the same instruction set
+     + Sony CXD8530BQ (System on a Chip)
+     + R3000A from MIPS & LSI Logic
+     + 32-bit RISC architecture
+       + RISC: Reduced Instruction Set Computer is designed for efficient execution by a pipelined processor and for code generation by an optimizing compiler
+     + CPU specs:
+       + 32 general-purpose registers
+       + 2 multiplication and division registers
+       + 32-bit data bus
+       + 32-bit address bus
+       + 1 ALU (arithmetic logic unit)
+       + 5-stage pipeline
+     + Coprocessors:
+       + CP0: System Control (cache, interrupts, exceptions, etc.)
+       + CP2: GTE (3D transformations and matrix math)
+       + MDEC: Media Decoder (full motion video)
+
+   - ISA (Instruction Set Architecture):
+     + Is a specification that describes the aspects of the CPU that are visible to a machine language programmer or to an assembler
+     + MIPS is one example of ISA, other examples are: x86, RISC-V, ARM, SPARC, PowerPC
+
+   - Endianness (byte ordering):
+     + The R3000A MIPS CPU of the PS1 uses Little Endian
+     + With Little Endian the least-significant byte of the number is placed first
+     + Example number: 0x12345678
+       + Big Endian:    12 34 56 78
+       + Little Endian: 78 56 34 12
+     
+   - CPU Memory Map:
+      KUSEG           KSEG0 (cached)  KSEG1 (uncached)
+      0x00000000      0x80000000      0xA0000000        2048K    Main RAM (first 64K reserved for BIOS)
+      0x1F000000      0x9F000000      0xBF000000        8192K    Expansion Region 1 (ROM/RAM)
+      0x1F800000      0x9F800000      ---               1K       Scratchpad (D-Cache used as Fast RAM)
+      0x1F801000      0x9F801000      0xBF801000        4K       I/0 Ports
+      0x1F802000      0x9F802000      0xBF802000        8K       Expansion Region 2 (I/O Ports)
+      0x1FA00000      0x9FA00000      0xBFA00000        2048K    Expansion Region 3 (general purpose)
+      0x1FC00000      0x9FC00000      0xBFC00000        512K     BIOS ROM (Kernel)
+
+     + Kernel Memory (upper 2GB):
+       + KSEG1: is the normal physical memory (cache disabled)
+       + KSEG0: is a mirror of KSEG1 (with cache enabled)
+
+     + User Memory (lower 2GB):
+       + KUSEG: Only the first 512MB of KUSEG are addressable
+         + In most MIPS processors, KUSEG is intended to contain 2GB of virtual memory.
+           The PSX doesn't support virtual memory, so KUSEG simply contains a mirror of KSEG0/KSEG1 in the first 512MB.
+
+   - Examples of I/O Ports at 0x1F80----
+     + GPU registers:
+       + 0x1F801810 - write - GP0: Send GP0 commands/packets (rendering & VRAM access)
+       + 0x1F801814 - write - GP1: Send GP1 commands/packets (display control)
+       + 0x1F801810 - read  - GPUREAD: Read responses to GP0 (C0h) and GP1 (10h) commands
+       + 0x1F801814 - read  - GPUSTAT: Read GPU status register
+     + SPU control registers:
+       + 0x1F801D80 - Main volume left/right
+       + 0x1F801D84 - Reverb output colume left/right
+       + 0x1F801D88 - Voice 0..23 Key ON  (start attack/decay/sustain)
+       + 0x1F801D8C - Voice 0..23 Key OFF (start release)
+     + MDEC registers:
+       + 0x1F801820 - write - MDEC command/parameter register
+       + 0x1F801824 - write - MDEC control/reset register
+       + 0x1F801820 - read  - MDEC data/response register
+       + 0x1F801824 - read  - MDEC status register
+      
+      
+
 
    - ...
    - ...
