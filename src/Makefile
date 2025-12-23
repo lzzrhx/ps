@@ -1,3 +1,3 @@
 build:
-	armips fillmem.s
-	python ../utils/bin2exe.py fillmem.bin fillmem.ps-exe
+	armips hellogpu.s
+	python ../utils/bin2exe.py hellogpu.bin hellogpu.ps-exe

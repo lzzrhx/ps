@@ -22,7 +22,7 @@
    [X]  #7: Warm Up Exercises
    [X]  #8: Subroutines & Negative Numbers
    [X]  #9: CISC vs RISC
-   [-] #10: Graphics System
+   [X] #10: Graphics System
    [-] #11: Rendering Polygons
    [-] #12: Memory Alignment
    [-] #13: Copying Data to VRAM
@@ -56,6 +56,8 @@
 
   #2 | NOTES
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+   - Links:
+     Playstation Specifications: https://psx-spx.consoledev.net/
    - Course pipeline:
      + History of the development of the Playstation
      + Hardware and technical specs
@@ -318,3 +320,14 @@
     + If the number is negative (two's complement):
                           1 0 1 1 1 0 0 1
       ->  1 1 1 1 1 1 1 1 1 0 1 1 1 0 0 1
+
+  - 512x1024 frame buffer (VRAM)
+  - GP0 used to send packets to the GPU
+    + Packets (command + paramters):
+      Command + color    CCBBGGRR
+      Vertex 1           YYYYXXXX
+      Vertex 2           YYYYXXXX
+      Vertex 3           YYYYXXXX
+      Vertex 4 (if quad) YYYYXXXX
+  - GP1 used to send control parameters to the GPU
+    + Command + params: CCPPPPPP
