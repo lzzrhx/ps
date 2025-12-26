@@ -331,3 +331,20 @@
       Vertex 4 (if quad) YYYYXXXX
   - GP1 used to send control parameters to the GPU
     + Command + params: CCPPPPPP
+
+  - Psy-Q was the original SDK and can be used to program for the PS1 with the C programming language
+
+  - There are other community-driven SDKs:
+    + PSn00bSDK - https://github.com/Lameguy64/PSn00bSDK
+    + CandyK-PSX - https://github.com/ChenThread/candyk-psx
+    + CKSDK - https://github.com/cuckydev/CKSDK
+    + PSXSDK - https://unhaut.epizy.com/psxsdk/?i=2
+
+  - Install instructions for Windows 11:
+    + VS Code: https://code.visualstudio.com/
+      + Extensions -> PSX.Dev, install
+      + Extensions -> Native Debug & clangd
+      + ctrl+shift+p -> PSX.Dev, show panel -> templates: Psy-Q SDK (Psy-Q Cube (install recommended tools)) -> reboot -> create
+      + to build: ctrl+shift+p -> PSX.Dev build debug
+      + to run: ctrl+shift+p -> launch PSXC-Redux
+      
