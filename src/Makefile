@@ -1,3 +1,3 @@
 build:
-	armips hellogpu.s
-	python ../utils/bin2exe.py hellogpu.bin hellogpu.ps-exe
+	armips image.s
+	python ../utils/bin2exe.py image.bin image.ps-exe
