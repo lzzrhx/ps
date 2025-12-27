@@ -26,7 +26,7 @@
    [X] #11: Rendering Polygons
    [X] #12: Memory Alignment
    [X] #13: Copying Data to VRAM
-   [-] #14: Moving from Assembly to C
+   [X] #14: Moving from Assembly to C
    [-] #15: Psy-Q Data Types
    [-] #16: Introduction to 3D Graphics
    [-] #17: The GTE Coprocessor
@@ -347,4 +347,3 @@
       + ctrl+shift+p -> PSX.Dev, show panel -> templates: Psy-Q SDK (Psy-Q Cube (install recommended tools)) -> reboot -> create
       + to build: ctrl+shift+p -> PSX.Dev build debug
       + to run: ctrl+shift+p -> launch PSXC-Redux
-
