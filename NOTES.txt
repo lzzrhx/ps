@@ -34,7 +34,7 @@
    [X] #19: GTE Inline Instructions
    [X] #20: Controller Input
    [X] #21: Linking Multiple Files
-   [-] #22: Camera Transformation
+   [X] #22: Camera Transformation
    [-] #23: CD-ROM Access
    [-] #24: Textured Polygons
    [-] #25: Decoding Primitive Files
@@ -404,3 +404,13 @@
       + div = 6144;                       // div = 1.5
       + fix_num = (fix_num * 4096) / div; // fix_num /= div
     + Bitshifting can also be used to perform multiplication and division if multiplying/dividing by 2/4/8/etc.
+
+  - The Camera Transformation is a stage of the graphics pipeline that transforms all the vertices of our scene, multiplying them by the view matrix and converting them to a new coordinate system whose origin is is the camera eye point looking at the positive z-axis
+
+  - Stages of graphics pipeline: Local Space --(Multiply by World Matrix)--> World Space --(Multiply by View Matrix)--> Camera Space --(Perspective Projection)--> Clip Space -> Screen Space & Rasterization
+
+  - Camera models:
+    + FPS camera model
+    + Look-at camera model
+
+  - The most popular way of creating a view matrix is using a camera LookAt() function
