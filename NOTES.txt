@@ -28,8 +28,8 @@
    [X] #13: Copying Data to VRAM
    [X] #14: Moving from Assembly to C
    [X] #15: Psy-Q Data Types
-   [-] #16: Introduction to 3D Graphics
-   [-] #17: The GTE Coprocessor
+   [X] #16: Introduction to 3D Graphics
+   [X] #17: The GTE Coprocessor
    [-] #18: Fixed-Point Math
    [-] #19: GTE Inline Instructions
    [-] #20: Controller Input
@@ -372,3 +372,9 @@
   - PSY-Q tools:
     + ccpsx - Compiler
     + psymake - Make for PSY-Q
+
+  - 3D Transformations (using the GTE):
+    + When we start the vertices are in model space (local coordinate system)
+    + Then, we transform the vertices into world space (multiply by the world matrix)
+    + The next step is to convert the vertices into camera space (multiply by view matrix)
+    + The scene is now in view space and can be projected into screen space (perspective divide)
