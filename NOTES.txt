@@ -35,7 +35,7 @@
    [X] #20: Controller Input
    [X] #21: Linking Multiple Files
    [X] #22: Camera Transformation
-   [-] #23: CD-ROM Access
+   [X] #23: CD-ROM Access
    [-] #24: Textured Polygons
    [-] #25: Decoding Primitive Files
    [-] #26: Decoding Texture Files
