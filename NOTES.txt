@@ -36,7 +36,7 @@
    [X] #21: Linking Multiple Files
    [X] #22: Camera Transformation
    [X] #23: CD-ROM Access
-   [-] #24: Textured Polygons
+   [X] #24: Textured Polygons
    [-] #25: Decoding Primitive Files
    [-] #26: Decoding Texture Files
    [-] #28: Multiple 3D Models
