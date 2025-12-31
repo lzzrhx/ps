@@ -38,7 +38,7 @@
    [X] #23: CD-ROM Access
    [X] #24: Textured Polygons
    [X] #25: Decoding Primitive Files
-   [-] #26: Decoding Texture Files
+   [X] #26: Decoding Texture Files
    [-] #28: Multiple 3D Models
    [-] #29: Loading Landscape Objects
    [-] #30: Loading Track Faces
@@ -414,3 +414,9 @@
     + Look-at camera model
 
   - The most popular way of creating a view matrix is using a camera LookAt() function
+  
+  - TIM files store texture data (4 or 8 bit with palette (clut) or 16-bit (rgb)) and VRAM position
+  
+  - CMP files store a list of TIM textures
+    + Uses little-endian order of bytes
+    + Each texture is stored compressed using lossless LZSS (Lempel-Ziv-Storer-Szymansk) algorithm

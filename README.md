@@ -3,7 +3,7 @@
 A Playstation 1 video game made by following the course [PS1 Programming with MIPS Assembly & C](https://pikuma.com/courses/ps1-programming-mips-assembly-language) by Gustavo Pezzi.
 
 > [!NOTE]
-> Windows XP environment set up:
+> **Windows XP environment set up:**
 > - Download and install [Mypal](https://www.mypal-browser.org/)
 > - Download and install [Programmer's Notepad v2.4.2.1440](https://github.com/simonsteele/pn/releases/download/v2.4.2/pn2421440_multilang.exe)
 > - Download and install [HxD](https://mh-nexus.de/downloads/HxDSetup.zip)
@@ -22,3 +22,4 @@ A Playstation 1 video game made by following the course [PS1 Programming with MI
 >     - GO32 -> DPMISTACK 1000000
 >     - GO32TMP -> C:\WINDOWS\TEMP
 >     - TMP -> C:\WINDOWS\TEMP
+> - Run BUILD.BAT to build project as BUILD\GAME.ISO

@@ -22,8 +22,10 @@ void Setup(void) {
     ResetNextPrim(GetCurrBuff());    
     setVector(&camera.position, 500, -1000, -1200);
     camera.lookat = (MATRIX){0};
+    LoadTextureCMP("\\ALLSH.CMP;1");
     LoadObjectPRM(&object, "\\ALLSH.PRM;1");
 }
+
 
 ///////////////////////////////////////////////////////////////////////////////
 // Update function

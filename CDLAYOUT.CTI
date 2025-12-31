@@ -46,6 +46,11 @@ Disc CDROMXA_PSX
 						Source [GameDir]\ASSETS\COMMON\ALLSH.PRM
 					EndFile
 
+					File ALLSH.CMP
+						XAFileAttributes Form1 Data
+						Source [GameDir]\ASSETS\COMMON\ALLSH.CMP
+					EndFile
+
 				EndHierarchy
 			EndPrimaryVolume
 		EndVolume

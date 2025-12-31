@@ -10,6 +10,7 @@
 #include <libgpu.h>
 #include <libcd.h>
 #include "inline_n.h"
+#include "lzss.h"
 
 #define OT_LEN 8192
 #define PRIMBUFF_LEN 131072

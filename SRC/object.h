@@ -3,6 +3,7 @@
 
 #include "globals.h"
 #include "camera.h"
+#include "texture.h"
 
 // Primitive Types
 #define     TYPE_F3              1
@@ -30,9 +31,10 @@
 #define     TYPE_SPOTLIGHT      23
 
 // Primitive Flags
-#define  SINGLE_SIDED  0x0001
-#define  SHIP_ENGINE   0x0002
-#define  TRANSLUCENT   0x0004
+#define  FLAG_SINGLE_SIDED  0x0001
+#define  FLAG_SHIP_ENGINE   0x0002
+#define  FLAG_TRANSLUCENT   0x0004
+
 
 typedef struct F3 {
     short             type;          /* Type of primitive */

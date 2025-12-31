@@ -3,6 +3,8 @@
 void LoadObjectPRM(Object* object, char* filename) {
     u_char *bytes;
     u_long b, i, length;
+    u_short uoffset, voffset;
+    Texture* texture;
     // Read file from CD
     bytes = (u_char*) FileRead(filename, &length);
     if (bytes == NULL) {
@@ -93,6 +95,17 @@ void LoadObjectPRM(Object* object, char* filename) {
                 prm->v2        = GetChar(bytes, &b);
                 prm->pad1      = GetShortBE(bytes, &b);
                 prm->color     = (CVECTOR) { GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b) };
+                texture = GetFromTextureStore(prm->texture);
+                prm->tpage = texture->tpage;
+                prm->clut = texture->clut;
+                uoffset = texture->u0;
+                voffset = texture->v0;
+                prm->u0 += uoffset;
+                prm->v0 += voffset;
+                prm->u1 += uoffset;
+                prm->v1 += voffset;
+                prm->u2 += uoffset;
+                prm->v2 += voffset;
                 break;
             }
             case TYPE_F4: {
@@ -131,6 +144,19 @@ void LoadObjectPRM(Object* object, char* filename) {
                 prm->v3        = GetChar(bytes, &b);
                 prm->pad1      = GetShortBE(bytes, &b);
                 prm->color     = (CVECTOR) { GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b) };
+                texture = GetFromTextureStore(prm->texture);
+                prm->tpage = texture->tpage;
+                prm->clut = texture->clut;
+                uoffset = texture->u0;
+                voffset = texture->v0;
+                prm->u0 += uoffset;
+                prm->v0 += voffset;
+                prm->u1 += uoffset;
+                prm->v1 += voffset;
+                prm->u2 += uoffset;
+                prm->v2 += voffset;
+                prm->u3 += uoffset;
+                prm->v3 += voffset;
                 break;
             }
             case TYPE_G3: {
@@ -170,6 +196,17 @@ void LoadObjectPRM(Object* object, char* filename) {
                 prm->color[0]  = (CVECTOR) { GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b) };
                 prm->color[1]  = (CVECTOR) { GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b) };
                 prm->color[2]  = (CVECTOR) { GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b) };
+                texture = GetFromTextureStore(prm->texture);
+                prm->tpage = texture->tpage;
+                prm->clut = texture->clut;
+                uoffset = texture->u0;
+                voffset = texture->v0;
+                prm->u0 += uoffset;
+                prm->v0 += voffset;
+                prm->u1 += uoffset;
+                prm->v1 += voffset;
+                prm->u2 += uoffset;
+                prm->v2 += voffset;
                 break;
             }
             case TYPE_G4: {
@@ -214,6 +251,19 @@ void LoadObjectPRM(Object* object, char* filename) {
                 prm->color[1]  = (CVECTOR) { GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b) };
                 prm->color[2]  = (CVECTOR) { GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b) };
                 prm->color[3]  = (CVECTOR) { GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b), GetChar(bytes, &b) };
+                texture = GetFromTextureStore(prm->texture);
+                prm->tpage = texture->tpage;
+                prm->clut = texture->clut;
+                uoffset = texture->u0;
+                voffset = texture->v0;
+                prm->u0 += uoffset;
+                prm->v0 += voffset;
+                prm->u1 += uoffset;
+                prm->v1 += voffset;
+                prm->u2 += uoffset;
+                prm->v2 += voffset;
+                prm->u3 += uoffset;
+                prm->v3 += voffset;
                 break;
             }
             case TYPE_TSPR:
@@ -313,10 +363,7 @@ void RenderObject(Object *object, Camera *camera) {
     // Loop all object primitives
     for (i = 0; i < object->numprimitives; i++) {
         switch (object->primitives[i].type) {
-            case TYPE_F3:
-            case TYPE_FT3:
-            case TYPE_G3:
-            case TYPE_GT3: {
+            case TYPE_F3: {
                 POLY_F3* poly;
                 F3* prm;
                 prm = (F3*) object->primitives[i].primitive;
@@ -335,18 +382,98 @@ void RenderObject(Object *object, Camera *camera) {
                 gte_stotz(&otz);
                 if (otz > 0 && otz < OT_LEN) {
                     SetPolyF3(poly);
-                    poly->r0 = 255;    // prm->color.r;
-                    poly->g0 = 255;    // prm->color.g;
-                    poly->b0 = 0;      // prm->color.b;
+                    setRGB0(poly, prm->color.r, prm->color.g, prm->color.b);
                     addPrim(GetOTAt(GetCurrBuff(), otz), poly);
                     IncrementNextPrim(sizeof(POLY_F3));
                 }
                 break;
             }
-            case TYPE_F4:
-            case TYPE_FT4:
-            case TYPE_G4:
-            case TYPE_GT4: {
+            case TYPE_G3: {
+                POLY_G3* poly;
+                G3* prm;
+                prm = (G3*) object->primitives[i].primitive;
+                poly = (POLY_G3*) GetNextPrim();
+                gte_ldv0(&object->vertices[prm->coords[0]]);
+                gte_ldv1(&object->vertices[prm->coords[1]]);
+                gte_ldv2(&object->vertices[prm->coords[2]]);
+                gte_rtpt();
+                gte_nclip();
+                gte_stopz(&nclip);
+                if (nclip < 0) {
+                    continue;
+                }
+                gte_stsxy3(&poly->x0, &poly->x1, &poly->x2);
+                gte_avsz3();
+                gte_stotz(&otz);
+                if (otz > 0 && otz < OT_LEN) {
+                    SetPolyG3(poly);
+                    setRGB0(poly, prm->color[0].r, prm->color[0].g, prm->color[0].b);
+                    setRGB1(poly, prm->color[1].r, prm->color[1].g, prm->color[1].b);
+                    setRGB2(poly, prm->color[2].r, prm->color[2].g, prm->color[2].b);
+                    addPrim(GetOTAt(GetCurrBuff(), otz), poly);
+                    IncrementNextPrim(sizeof(POLY_G3));
+                }
+                break;
+            }
+            case TYPE_FT3: {
+                POLY_FT3* poly;
+                FT3* prm;
+                prm = (FT3*) object->primitives[i].primitive;
+                poly = (POLY_FT3*) GetNextPrim();
+                gte_ldv0(&object->vertices[prm->coords[0]]);
+                gte_ldv1(&object->vertices[prm->coords[1]]);
+                gte_ldv2(&object->vertices[prm->coords[2]]);
+                gte_rtpt();
+                gte_nclip();
+                gte_stopz(&nclip);
+                if (nclip < 0) {
+                    continue;
+                }
+                gte_stsxy3(&poly->x0, &poly->x1, &poly->x2);
+                gte_avsz3();
+                gte_stotz(&otz);
+                if (otz > 0 && otz < OT_LEN) {
+                    SetPolyFT3(poly);
+                    setRGB0(poly, prm->color.r, prm->color.g, prm->color.b);
+                    poly->tpage = prm->tpage;
+                    poly->clut  = prm->clut;
+                    setUV3(poly, prm->u0, prm->v0, prm->u1, prm->v1, prm->u2, prm->v2);
+                    addPrim(GetOTAt(GetCurrBuff(), otz), poly);
+                    IncrementNextPrim(sizeof(POLY_FT3));
+                }
+                break;
+            }
+            case TYPE_GT3: {
+                POLY_GT3* poly;
+                GT3* prm;
+                prm = (GT3*) object->primitives[i].primitive;
+                poly = (POLY_GT3*) GetNextPrim();
+                gte_ldv0(&object->vertices[prm->coords[0]]);
+                gte_ldv1(&object->vertices[prm->coords[1]]);
+                gte_ldv2(&object->vertices[prm->coords[2]]);
+                gte_rtpt();
+                gte_nclip();
+                gte_stopz(&nclip);
+                if (nclip < 0) {
+                    continue;
+                }
+                gte_stsxy3(&poly->x0, &poly->x1, &poly->x2);
+                gte_avsz3();
+                gte_stotz(&otz);
+                if (otz > 0 && otz < OT_LEN) {
+                    SetPolyGT3(poly);
+                    setRGB0(poly, prm->color[0].r, prm->color[0].g, prm->color[0].b);
+                    setRGB1(poly, prm->color[1].r, prm->color[1].g, prm->color[1].b);
+                    setRGB2(poly, prm->color[2].r, prm->color[2].g, prm->color[2].b);
+                    poly->tpage = prm->tpage;
+                    poly->clut  = prm->clut;
+                    setUV3(poly, prm->u0, prm->v0, prm->u1, prm->v1, prm->u2, prm->v2);
+                    addPrim(GetOTAt(GetCurrBuff(), otz), poly);
+                    IncrementNextPrim(sizeof(POLY_GT3));
+                }
+                break;
+            }
+            case TYPE_F4: {
                 POLY_F4* poly;
                 F4* prm;
                 prm = (F4*) object->primitives[i].primitive;
@@ -368,11 +495,107 @@ void RenderObject(Object *object, Camera *camera) {
                 gte_stotz(&otz);
                 if (otz > 0 && otz < OT_LEN) {
                     SetPolyF4(poly);
-                    poly->r0 = 255;    // prm->color.r;
-                    poly->g0 = 0;      // prm->color.g;
-                    poly->b0 = 255;    // prm->color.b;
+                    poly->r0 = prm->color.r;
+                    poly->g0 = prm->color.g;
+                    poly->b0 = prm->color.b;
                     addPrim(GetOTAt(GetCurrBuff(), otz), poly);
                     IncrementNextPrim(sizeof(POLY_F4));
+                }
+                break;
+            }
+            case TYPE_G4: {
+                POLY_G4* poly;
+                G4* prm;
+                prm = (G4*) object->primitives[i].primitive;
+                poly = (POLY_G4*) GetNextPrim();
+                gte_ldv0(&object->vertices[prm->coords[0]]);
+                gte_ldv1(&object->vertices[prm->coords[1]]);
+                gte_ldv2(&object->vertices[prm->coords[2]]);
+                gte_rtpt();
+                gte_nclip();
+                gte_stopz(&nclip);
+                if (nclip < 0) {
+                    continue;
+                }
+                gte_stsxy0(&poly->x0);
+                gte_ldv0(&object->vertices[prm->coords[3]]);
+                gte_rtps();
+                gte_stsxy3(&poly->x1, &poly->x2, &poly->x3);
+                gte_avsz4();
+                gte_stotz(&otz);
+                if (otz > 0 && otz < OT_LEN) {
+                    SetPolyG4(poly);
+                    setRGB0(poly, prm->color[0].r, prm->color[0].g, prm->color[0].b);
+                    setRGB1(poly, prm->color[1].r, prm->color[1].g, prm->color[1].b);
+                    setRGB2(poly, prm->color[2].r, prm->color[2].g, prm->color[2].b);
+                    setRGB3(poly, prm->color[3].r, prm->color[3].g, prm->color[3].b);
+                    addPrim(GetOTAt(GetCurrBuff(), otz), poly);
+                    IncrementNextPrim(sizeof(POLY_G4));
+                }
+                break;
+            }
+            case TYPE_FT4: {
+                POLY_FT4* poly;
+                FT4* prm;
+                prm = (FT4*) object->primitives[i].primitive;
+                poly = (POLY_FT4*) GetNextPrim();
+                gte_ldv0(&object->vertices[prm->coords[0]]);
+                gte_ldv1(&object->vertices[prm->coords[1]]);
+                gte_ldv2(&object->vertices[prm->coords[2]]);
+                gte_rtpt();
+                gte_nclip();
+                gte_stopz(&nclip);
+                if (nclip < 0) {
+                    continue;
+                }
+                gte_stsxy0(&poly->x0);
+                gte_ldv0(&object->vertices[prm->coords[3]]);
+                gte_rtps();
+                gte_stsxy3(&poly->x1, &poly->x2, &poly->x3);
+                gte_avsz4();
+                gte_stotz(&otz);
+                if (otz > 0 && otz < OT_LEN) {
+                    SetPolyFT4(poly);
+                    setRGB0(poly, prm->color.r, prm->color.g, prm->color.b);
+                    poly->tpage = prm->tpage;
+                    poly->clut  = prm->clut;
+                    setUV4(poly, prm->u0, prm->v0, prm->u1, prm->v1, prm->u2, prm->v2, prm->u3, prm->v3);
+                    addPrim(GetOTAt(GetCurrBuff(), otz), poly);
+                    IncrementNextPrim(sizeof(POLY_FT4));
+                }
+                break;
+            }
+            case TYPE_GT4: {
+                POLY_GT4* poly;
+                GT4* prm;
+                prm = (GT4*) object->primitives[i].primitive;
+                poly = (POLY_GT4*) GetNextPrim();
+                gte_ldv0(&object->vertices[prm->coords[0]]);
+                gte_ldv1(&object->vertices[prm->coords[1]]);
+                gte_ldv2(&object->vertices[prm->coords[2]]);
+                gte_rtpt();
+                gte_nclip();
+                gte_stopz(&nclip);
+                if (nclip < 0) {
+                    continue;
+                }
+                gte_stsxy0(&poly->x0);
+                gte_ldv0(&object->vertices[prm->coords[3]]);
+                gte_rtps();
+                gte_stsxy3(&poly->x1, &poly->x2, &poly->x3);
+                gte_avsz4();
+                gte_stotz(&otz);
+                if (otz > 0 && otz < OT_LEN) {
+                    SetPolyGT4(poly);
+                    setRGB0(poly, prm->color[0].r, prm->color[0].g, prm->color[0].b);
+                    setRGB1(poly, prm->color[1].r, prm->color[1].g, prm->color[1].b);
+                    setRGB2(poly, prm->color[2].r, prm->color[2].g, prm->color[2].b);
+                    setRGB3(poly, prm->color[3].r, prm->color[3].g, prm->color[3].b);
+                    poly->tpage = prm->tpage;
+                    poly->clut  = prm->clut;
+                    setUV4(poly, prm->u0, prm->v0, prm->u1, prm->v1, prm->u2, prm->v2, prm->u3, prm->v3);
+                    addPrim(GetOTAt(GetCurrBuff(), otz), poly);
+                    IncrementNextPrim(sizeof(POLY_GT4));
                 }
                 break;
             }
