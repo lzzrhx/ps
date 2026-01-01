@@ -57,3 +57,9 @@ long GetLongBE(u_char* bytes, u_long* b) {
     value |= bytes[(*b)++] <<  0;
     return (long) value;
 }
+
+long Clamp16Bit(long value) {
+    if (value > +32767) return +32767;
+    if (value < -32767) return -32767;
+    return value;
+}

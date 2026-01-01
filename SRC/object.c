@@ -604,6 +604,7 @@ Object* GetObjectByIndex(Object *list, u_short index) {
             break;
         }
         currobj = currobj->next;
+        i++;
     }
     return currobj;
 }

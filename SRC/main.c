@@ -6,13 +6,14 @@
 #include "camera.h"
 #include "object.h"
 #include "utils.h"
+#include "track.h"
 
 
 Camera camera;
 Object* ships;
 Object* ship;
-Object* sceneobjs;
-u_short shipindex = 0;
+Track track;
+//Object* sceneobjs;
 
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,13 +27,17 @@ void Setup(void) {
     ResetNextPrim(GetCurrBuff());
     shipsstarttexture = GetTextureCount();
     LoadTextureCMP("\\ALLSH.CMP;1");
-    scenestarttexture = GetTextureCount();
-    LoadTextureCMP("\\TRACK02\\SCENE.CMP;1");
+    //scenestarttexture = GetTextureCount();
+    //LoadTextureCMP("\\TRACK02\\SCENE.CMP;1");
     ships = LoadObjectPRM("\\ALLSH.PRM;1", shipsstarttexture);
-    sceneobjs = LoadObjectPRM("\\TRACK02\\SCENE.PRM;1", scenestarttexture);
-    ship = GetObjectByIndex(ships, shipindex);
+    //sceneobjs = LoadObjectPRM("\\TRACK02\\SCENE.PRM;1", scenestarttexture);
+    LoadTrackVertices(&track, "\\TRACK02\\TRACK.TRV;1");
+    LoadTrackFaces(&track, "\\TRACK02\\TRACK.TRF;1");
+    LoadTrackSections(&track, "\\TRACK02\\TRACK.TRS;1");
+    ship = GetObjectByIndex(ships, 1);
     setVector(&ship->position, 32599, -347, -45310);
-    setVector(&camera.position, ship->position.vx, ship->position.vy - 100, ship->position.vz - 1000);
+    setVector(&camera.position, ship->position.vx, ship->position.vy - 250, ship->position.vz - 1200);
+    camera.rotmat = (MATRIX){0};
     camera.lookat = (MATRIX){0};
 }
 
@@ -45,19 +50,22 @@ void Update(void) {
     EmptyOT(GetCurrBuff());
     JoyPadUpdate();
     if (JoyPadCheck(PAD1_LEFT)) {
-        camera.position.vx -= 100;
+        camera.position.vx -= 15;
     }
     if (JoyPadCheck(PAD1_RIGHT)) {
-        camera.position.vx += 100;
+        camera.position.vx += 15;
     }
     if (JoyPadCheck(PAD1_UP)) {
-        camera.position.vy -= 100;
+        camera.position.vz += 100;
+        ship->position.vz += 100;
     }
     if (JoyPadCheck(PAD1_DOWN)) {
-        camera.position.vy += 100;
+        camera.position.vz -= 100;
+        ship->position.vz -= 100;
     }
     LookAt(&camera, &camera.position, &ship->position, &(VECTOR){0, -ONE, 0});
-    RenderSceneObjects(sceneobjs, &camera);
+    //RenderSceneObjects(sceneobjs, &camera);
+    RenderTrack(&track, &camera);
     RenderObject(ship, &camera);
 }
 

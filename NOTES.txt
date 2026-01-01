@@ -41,7 +41,7 @@
    [X] #26: Decoding Texture Files
    [X] #28: Multiple 3D Models
    [X] #29: Loading Landscape Objects
-   [-] #30: Loading Track Faces
+   [X] #30: Loading Track Faces
    [-] #31: Loading Track Texture
    [-] #32: Polygon Subdivision
    [-] #33: Movement & Physics
