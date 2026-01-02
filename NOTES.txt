@@ -43,7 +43,7 @@
    [X] #29: Loading Landscape Objects
    [X] #30: Loading Track Faces
    [X] #31: Loading Track Texture
-   [-] #32: Polygon Subdivision
+   [X] #32: Polygon Subdivision
    [-] #33: Movement & Physics
    [-] #34: Refactoring Track Visibility
    [-] #35: Attracting & Track
@@ -420,3 +420,8 @@
   - CMP files store a list of TIM textures
     + Uses little-endian order of bytes
     + Each texture is stored compressed using lossless LZSS (Lempel-Ziv-Storer-Szymansk) algorithm
+
+  - Simple methods to reducing T-junctions when performing polygon subdivision:
+    + Filling the gap with a new narrow triangle
+    + Rendering lo-res mesh behind the hi-res mesh
+    + Using degenerate triangles

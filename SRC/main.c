@@ -52,18 +52,18 @@ void Update(void) {
     EmptyOT(GetCurrBuff());
     JoyPadUpdate();
     if (JoyPadCheck(PAD1_LEFT)) {
-        camera.position.vx -= 15;
+        camera.position.vx -= 25;
     }
     if (JoyPadCheck(PAD1_RIGHT)) {
-        camera.position.vx += 15;
+        camera.position.vx += 25;
     }
     if (JoyPadCheck(PAD1_UP)) {
         camera.position.vz += 100;
         ship->position.vz += 100;
     }
     if (JoyPadCheck(PAD1_DOWN)) {
-        camera.position.vz -= 100;
-        ship->position.vz -= 100;
+        camera.position.vz -= 200;
+        ship->position.vz -= 200;
     }
     LookAt(&camera, &camera.position, &ship->position, &(VECTOR){0, -ONE, 0});
     //RenderSceneObjects(sceneobjs, &camera);
