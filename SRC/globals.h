@@ -14,6 +14,8 @@
 
 #define OT_LEN 8192
 #define PRIMBUFF_LEN 131072
+#define TRACK_PULL 100
+#define TRACK_PUSH 30000
 
 void EmptyOT(u_short currbuff);
 void SetOTAt(u_short currbuff, u_int i, u_long value);

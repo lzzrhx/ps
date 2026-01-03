@@ -46,7 +46,7 @@
    [X] #32: Polygon Subdivision
    [X] #33: Movement & Physics
    [X] #34: Refactoring Track Visibility
-   [-] #35: Attracting & Track
+   [X] #35: Attracting & Track
    [-] #36: Audio
    [-] #37: Conclusion
 
@@ -57,7 +57,7 @@
   #2 | NOTES
  - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
    - Links:
-     Playstation Specifications: https://psx-spx.consoledev.net/
+     + Playstation Specifications: https://psx-spx.consoledev.net/
    - Course pipeline:
      + History of the development of the Playstation
      + Hardware and technical specs

@@ -65,6 +65,8 @@ void UpdateShipNearestSection(Ship* ship) {
 void ShipUpdate(Ship* ship) {
     VECTOR force;
     VECTOR nosevel;
+    VECTOR basetoship;
+    long height;
     short sinx;
     short cosx;
     short siny;
@@ -97,8 +99,24 @@ void ShipUpdate(Ship* ship) {
     nosevel.vx = (ship->speed * ship->forward.vx) >> 12;
     nosevel.vy = (ship->speed * ship->forward.vy) >> 12;
     nosevel.vz = (ship->speed * ship->forward.vz) >> 12;
+    // Compute the dot product (projection) to find the height between the ship and the track base
+    basetoship.vx = ship->object->position.vx - ship->section->basevertex.vx;
+    basetoship.vy = ship->object->position.vy - ship->section->basevertex.vy;
+    basetoship.vz = ship->object->position.vz - ship->section->basevertex.vz;
+    height = ((basetoship.vx * ship->section->normal.vx) >> 12) + ((basetoship.vy * ship->section->normal.vy) >> 12) + ((basetoship.vz * ship->section->normal.vz) >> 12);
+    if (height < 50) {
+        height = 50;
+    }
     // The force is the sum of all forces
     force = (VECTOR){0, 0, 0};
+    // Compute and add the force of attraction (in the inverse direction of the normal of the track)
+    force.vx += -ship->section->normal.vx * TRACK_PULL;
+    force.vy += -ship->section->normal.vy * TRACK_PULL;
+    force.vz += -ship->section->normal.vz * TRACK_PULL;
+    // Compute and add the force of repulsion (in the direction of the normal of the track)
+    force.vx += ship->section->normal.vx * TRACK_PUSH / height;
+    force.vy += ship->section->normal.vy * TRACK_PUSH / height;
+    force.vz += ship->section->normal.vz * TRACK_PUSH / height;
     force.vx += ship->thrust.vx;
     force.vy += ship->thrust.vy;
     force.vz += ship->thrust.vz;

@@ -37,6 +37,7 @@ typedef struct Section {
     struct Section* next;
     VECTOR center;
     SVECTOR normal;
+    VECTOR basevertex;
     short numfaces;
     short facestart;
 } Section;

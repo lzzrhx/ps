@@ -76,7 +76,7 @@ void LoadTrackFaces(Track* track, char* filename, u_short texturestart) {
 }
 
 void LoadTrackSections(Track* track, char* filename) {
-    u_long i, b, length;
+    u_long i, j, b, length;
     u_char* bytes;
     bytes = (u_char*) FileRead(filename, &length);
     if (bytes == NULL) {
@@ -101,9 +101,20 @@ void LoadTrackSections(Track* track, char* filename) {
         track->sections[i].id = GetShortBE(bytes, &b);
         track->sections[i].id = i;
         b += 2;
+        for (j = 0; j < track->sections[i].numfaces; j++) {
+            Face *face = track->faces + track->sections[i].facestart + j;
+            if (face->flags & FACE_TRACK_BASE) {
+                track->sections[i].normal = face->normal;
+                track->sections[i].basevertex.vx = track->vertices[face->indices[0]].vx;
+                track->sections[i].basevertex.vy = track->vertices[face->indices[0]].vy;
+                track->sections[i].basevertex.vz = track->vertices[face->indices[0]].vz;
+                break;
+            }
+        }
     }
     free(bytes);
 }
+
 
 void RenderQuadRecursive(Face* face, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVECTOR *v3, u_short tu0, u_short tv0, u_short tu1, u_short tv1, u_short tu2, u_short tv2, u_short tu3, u_short tv3, u_short level, u_short depth) {
     if (level >= depth) {
@@ -158,6 +169,45 @@ void RenderQuadRecursive(Face* face, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVEC
     }
 }
 
+void DrawSectionNormal(Section *section, Camera *camera) {
+    SVECTOR v0, v1, v2;
+    int i;
+    long otz;
+    POLY_F3 *polya, *polyb, *polyc;
+    LINE_F2 line;
+    polya = (POLY_F3*) GetNextPrim();
+    SetPolyF3(polya);
+    v0.vx = (short) (section->center.vx - camera->position.vx);
+    v0.vy = (short) (section->center.vy - camera->position.vy);
+    v0.vz = (short) (section->center.vz - camera->position.vz);
+    v1 = v2 = v0;
+    otz  = RotTransPers(&v0, (long*)&polya->x0, NULL, NULL);
+    otz += RotTransPers(&v1, (long*)&polya->x1, NULL, NULL);
+    otz += RotTransPers(&v2, (long*)&polya->x2, NULL, NULL);
+    otz /= 3;
+    setRGB0(polya, 0, 0, 0);
+    addPrim(GetOTAt(GetCurrBuff(), otz), polya);
+    IncrementNextPrim(sizeof(POLY_FT3));
+    polyb = (POLY_F3*) GetNextPrim();
+    SetPolyF3(polyb);
+    v0.vx = (short) Clamp16Bit((section->center.vx - camera->position.vx)) + (section->normal.vx >> 3);
+    v0.vy = (short) Clamp16Bit((section->center.vy - camera->position.vy)) + (section->normal.vy >> 3);
+    v0.vz = (short) Clamp16Bit((section->center.vz - camera->position.vz)) + (section->normal.vz >> 3);
+    v1 = v2 = v0;
+    otz  = RotTransPers(&v0, (long*)&polyb->x0, NULL, NULL);
+    otz += RotTransPers(&v1, (long*)&polyb->x1, NULL, NULL);
+    otz += RotTransPers(&v2, (long*)&polyb->x2, NULL, NULL);
+    otz /= 3;
+    setRGB0(polyb, 0, 0, 0);
+    addPrim(GetOTAt(GetCurrBuff(), otz), polyb);
+    IncrementNextPrim(sizeof(POLY_FT3));
+    // Draw magenta line for the section normal
+    SetLineF2(&line);
+    setXY2(&line, polya->x0, polya->y0, polyb->x0, polyb->y0);
+    setRGB0(&line, 255, 0, 255);
+    DrawPrim(&line);
+    }
+
 void RenderTrackSection(Track* track, Section* section, Camera* camera, u_short numsubdivs) {
     int i;
     SVECTOR v0, v1, v2, v3;
@@ -193,6 +243,7 @@ void RenderTrackSection(Track* track, Section* section, Camera* camera, u_short 
         v3.vz = (short) Clamp16Bit(track->vertices[face->indices[3]].vz - camera->position.vz);
         RenderQuadRecursive(face, &v0, &v1, &v2, &v3, face->u0, face->v0, face->u1, face->v1,face->u2, face->v2, face->u3, face->v3, 0, numsubdivs);
     }
+    DrawSectionNormal(section, camera);
 }
 
 void RenderTrack(Track* track, Camera* camera, Section* startsection) {
