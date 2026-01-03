@@ -53,6 +53,6 @@ typedef struct Track {
 void LoadTrackVertices(Track* track, char* filename);
 void LoadTrackFaces(Track* track, char* filename, u_short texturestart);
 void LoadTrackSections(Track* track, char* filename);
-void RenderTrack(Track* track, Camera* camera);
+void RenderTrack(Track* track, Camera* camera, Section* startsection);
 
 #endif

@@ -105,7 +105,7 @@ void Update(void) {
 ///////////////////////////////////////////////////////////////////////////////
 void Render(void) {
     //RenderSceneObjects(sceneobjs, &camera);
-    RenderTrack(&track, &camera);
+    RenderTrack(&track, &camera, ship.section);
     RenderObject(ship.object, &camera);
     DrawXYZAxis(&ship, &camera);
     DisplayFrame();

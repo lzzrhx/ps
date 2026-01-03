@@ -1,6 +1,10 @@
 #include "ship.h"
 
 void ShipInit(Ship* ship, Track* track, VECTOR* startpos) {
+    Section* curr;
+    VECTOR d;
+    long distmag;
+    long mindist;
     ship->object->position.vx = startpos->vx;
     ship->object->position.vy = startpos->vy;
     ship->object->position.vz = startpos->vz;
@@ -17,10 +21,45 @@ void ShipInit(Ship* ship, Track* track, VECTOR* startpos) {
     ship->accyaw = 0;
     ship->accpitch = 0;
     ship->accroll = 0;
-    ship->mass = 150;
     ship->speed = 0;
     ship->thrustmag = 0;
     ship->thrustmax = 15000;
+    ship->mass = 150;
+    // Find current track section
+    curr = track->sections;
+    mindist = 99999999;
+    do {
+        d.vx = curr->center.vx - startpos->vx;
+        d.vy = curr->center.vy - startpos->vy;
+        d.vz = curr->center.vz - startpos->vz;
+        distmag = SquareRoot12(d.vx * d.vx + d.vy * d.vy + d.vz * d.vz);
+        if (distmag < mindist) {
+            mindist = distmag;
+            ship->section = curr;
+        }
+        curr = curr->next;
+    } while (curr != track->sections);
+}
+
+void UpdateShipNearestSection(Ship* ship) {
+    u_short i;
+    Section* curr;
+    VECTOR d;
+    long distmag;
+    long mindist;
+    curr = ship->section->prev->prev;
+    mindist = 99999999;
+    for (i = 0; i < 5; i++) {
+        d.vx = curr->center.vx - ship->object->position.vx;
+        d.vy = curr->center.vy - ship->object->position.vy;
+        d.vz = curr->center.vz - ship->object->position.vz;
+        distmag = SquareRoot12(d.vx * d.vx + d.vy * d.vy + d.vz * d.vz);
+        if (distmag < mindist) {
+            mindist = distmag;
+            ship->section = curr;
+        }
+        curr = curr->next;
+    }
 }
 
 void ShipUpdate(Ship* ship) {
@@ -87,6 +126,8 @@ void ShipUpdate(Ship* ship) {
     ship->pitch += ship->velpitch;
     ship->roll += ship->velroll >> 1;
     ship->roll -= ship->roll >> 3;
+    // Update the closetst ship section
+    UpdateShipNearestSection(ship);
     // Set the ship->object orientation matrix (order of rotation: Yaw --> Pitch --> Roll)
     ship->object->rotmat.m[0][0] = ship->right.vx;
     ship->object->rotmat.m[1][0] = ship->right.vy;

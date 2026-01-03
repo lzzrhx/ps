@@ -158,8 +158,8 @@ void RenderQuadRecursive(Face* face, SVECTOR *v0, SVECTOR *v1, SVECTOR *v2, SVEC
     }
 }
 
-void RenderTrackSection(Track* track, Section* section, Camera* camera, u_long distmag) {
-    int i, depth;
+void RenderTrackSection(Track* track, Section* section, Camera* camera, u_short numsubdivs) {
+    int i;
     SVECTOR v0, v1, v2, v3;
     MATRIX worldmat;
     MATRIX viewmat;
@@ -179,39 +179,30 @@ void RenderTrackSection(Track* track, Section* section, Camera* camera, u_long d
     SetTransMatrix(&viewmat);
     for (i = 0; i < section->numfaces; i++) {
         Face* face = track->faces + section->facestart + i;
-        v0.vx = (short) (track->vertices[face->indices[1]].vx - camera->position.vx);
-        v0.vy = (short) (track->vertices[face->indices[1]].vy - camera->position.vy);
-        v0.vz = (short) (track->vertices[face->indices[1]].vz - camera->position.vz);
-        v1.vx = (short) (track->vertices[face->indices[0]].vx - camera->position.vx);
-        v1.vy = (short) (track->vertices[face->indices[0]].vy - camera->position.vy);
-        v1.vz = (short) (track->vertices[face->indices[0]].vz - camera->position.vz);
-        v2.vx = (short) (track->vertices[face->indices[2]].vx - camera->position.vx);
-        v2.vy = (short) (track->vertices[face->indices[2]].vy - camera->position.vy);
-        v2.vz = (short) (track->vertices[face->indices[2]].vz - camera->position.vz);
-        v3.vx = (short) (track->vertices[face->indices[3]].vx - camera->position.vx);
-        v3.vy = (short) (track->vertices[face->indices[3]].vy - camera->position.vy);
-        v3.vz = (short) (track->vertices[face->indices[3]].vz - camera->position.vz);
-        depth = 0;
-        if (distmag < 600000) depth = 1;
-        if (distmag < 200000) depth = 2;
-        RenderQuadRecursive(face, &v0, &v1, &v2, &v3, face->u0, face->v0, face->u1, face->v1,face->u2, face->v2, face->u3, face->v3, 0, depth);
+        v0.vx = (short) Clamp16Bit(track->vertices[face->indices[1]].vx - camera->position.vx);
+        v0.vy = (short) Clamp16Bit(track->vertices[face->indices[1]].vy - camera->position.vy);
+        v0.vz = (short) Clamp16Bit(track->vertices[face->indices[1]].vz - camera->position.vz);
+        v1.vx = (short) Clamp16Bit(track->vertices[face->indices[0]].vx - camera->position.vx);
+        v1.vy = (short) Clamp16Bit(track->vertices[face->indices[0]].vy - camera->position.vy);
+        v1.vz = (short) Clamp16Bit(track->vertices[face->indices[0]].vz - camera->position.vz);
+        v2.vx = (short) Clamp16Bit(track->vertices[face->indices[2]].vx - camera->position.vx);
+        v2.vy = (short) Clamp16Bit(track->vertices[face->indices[2]].vy - camera->position.vy);
+        v2.vz = (short) Clamp16Bit(track->vertices[face->indices[2]].vz - camera->position.vz);
+        v3.vx = (short) Clamp16Bit(track->vertices[face->indices[3]].vx - camera->position.vx);
+        v3.vy = (short) Clamp16Bit(track->vertices[face->indices[3]].vy - camera->position.vy);
+        v3.vz = (short) Clamp16Bit(track->vertices[face->indices[3]].vz - camera->position.vz);
+        RenderQuadRecursive(face, &v0, &v1, &v2, &v3, face->u0, face->v0, face->u1, face->v1,face->u2, face->v2, face->u3, face->v3, 0, numsubdivs);
     }
 }
 
-void RenderTrack(Track* track, Camera* camera) {
-    VECTOR d;
-    u_long distmagsq, distmag;
+void RenderTrack(Track* track, Camera* camera, Section* startsection) {
+    u_short i, numsubdivs;
     Section* currsection;
-    currsection = track->sections;
-    do {
-        d.vx = Clamp16Bit(currsection->center.vx - camera->position.vx);
-        d.vy = Clamp16Bit(currsection->center.vy - camera->position.vy);
-        d.vz = Clamp16Bit(currsection->center.vz - camera->position.vz);
-        distmagsq = d.vx * d.vx + d.vy * d.vy + d.vz * d.vz;
-        distmag = SquareRoot12(distmagsq);
-        if (distmag < 1350000) {
-            RenderTrackSection(track, currsection, camera, distmag);
-        }
+    currsection = startsection->prev;
+    for (i = 0; i < 20; i++) {
+        if (i < 6) numsubdivs = 1;
+        if (i < 2) numsubdivs = 2;
+        RenderTrackSection(track, currsection, camera, numsubdivs);
         currsection = currsection->next;
-    } while (currsection != track->sections);
+    }
 }
