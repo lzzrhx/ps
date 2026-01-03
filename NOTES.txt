@@ -44,7 +44,7 @@
    [X] #30: Loading Track Faces
    [X] #31: Loading Track Texture
    [X] #32: Polygon Subdivision
-   [-] #33: Movement & Physics
+   [X] #33: Movement & Physics
    [-] #34: Refactoring Track Visibility
    [-] #35: Attracting & Track
    [-] #36: Audio

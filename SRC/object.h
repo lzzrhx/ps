@@ -345,7 +345,7 @@ typedef struct Object {
     SVECTOR*       normals;       // Pointer to 3D normals
     short          numprimitives; // Number of Primitives
     PrimitiveNode* primitives;    // Pointer to Z sort Primitives
-    SVECTOR        rotation;      // Model rotation
+    MATRIX         rotmat;        // Rotation matrix that encodes the orientation of the object
     VECTOR         position;      // Model position
     VECTOR         scale;         // Model scale
     struct Object* next;
